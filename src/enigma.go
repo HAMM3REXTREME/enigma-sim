@@ -1,15 +1,24 @@
 package main
 
-import "fmt"
+func getFullEnigma(plugboard *obfuscatorMap, rotors [3]*rotor, strList []string, reflectorMap map[int]int) []string {
+	enigmaList := make([]string, len(strList))
+	for i := 0; i < len(strList); i++ {
+		char := strList[i]
+		updateRotors(rotors)
 
-func addWithOverflow(a, b, modulus int) int {
-	// Adds a and b
-	// Returns 0<result<=26
-	result := (a + b) % modulus
-	if result <= 0 {
-		result += modulus
+		num, _ := getLetterNumberByChar(char)
+
+		num = getThroughPlugboardF(plugboard, num)
+		num = getThroughRotorsF(rotors, num)
+		num = getThroughReflector(reflectorMap, num)
+		num = getThroughRotorsB(rotors, num)
+		num = getThroughPlugboardB(plugboard, num)
+
+		char, _ = getCharByNumber(num)
+		enigmaList[i] = char
+
 	}
-	return result
+	return enigmaList
 }
 
 func updateRotors(rotorArray [3]*rotor) {
@@ -34,16 +43,15 @@ func getThroughRotorsF(rotorArray [3]*rotor, letterID int) int {
 	for i := 0; i < len(rotorArray); i++ {
 		// Adjust the rotor position to consider rotorSpinOffset
 		adjustedSignal := addWithOverflow(letterSignal, rotorArray[i].rotorSpinOffset-1, 26)
-		fmt.Printf("    ROTOR #%d: Input is letter at #%d plus offset %d--> Really: %d\n", i, letterSignal, rotorArray[i].rotorSpinOffset-1, adjustedSignal)
+		//fmt.Printf("    ROTOR #%d: Input is letter at #%d plus offset %d--> Really: %d\n", i, letterSignal, rotorArray[i].rotorSpinOffset-1, adjustedSignal)
 		letterSignal = rotorArray[i].rotorMap.forward[adjustedSignal]
-		fmt.Printf("    ROTOR #%d : Output is letter #%d\n", i, letterSignal)
+		//fmt.Printf("    ROTOR #%d : Output is letter #%d\n", i, letterSignal)
 
 		// Check for rotor rotation
 		if i == len(rotorArray)-1 {
 			rotorArray[i].rotate()
 		}
 	}
-	fmt.Println()
 	return letterSignal
 }
 
@@ -55,23 +63,16 @@ func getThroughRotorsB(rotorArray [3]*rotor, letterID int) int {
 	for i := len(rotorArray) - 1; i >= 0; i-- {
 		// Adjust the rotor position to consider rotorSpinOffset
 		adjustedSignal := addWithOverflow(letterSignal, -(rotorArray[i].rotorSpinOffset - 1), 26)
-		fmt.Printf("    ROTOR #%d: Input is letter at #%d plus offset %d--> Really: %d\n", i, letterSignal, rotorArray[i].rotorSpinOffset-1, adjustedSignal)
+		//fmt.Printf("    ROTOR #%d: Input is letter at #%d plus offset %d--> Really: %d\n", i, letterSignal, rotorArray[i].rotorSpinOffset-1, adjustedSignal)
 		letterSignal = rotorArray[i].rotorMap.backward[adjustedSignal]
-		fmt.Printf("    ROTOR #%d : Output is letter #%d\n", i, letterSignal)
+		//fmt.Printf("    ROTOR #%d : Output is letter #%d\n", i, letterSignal)
 
 		// Check for rotor rotation
 		if i == 0 {
 			rotorArray[i].rotate()
 		}
 	}
-	fmt.Println()
 	return letterSignal
-}
-
-// Add a rotate method to the rotor struct
-func (r *rotor) rotate() {
-	r.rotorSpinOffset = addWithOverflow(r.rotorSpinOffset, 1, 26)
-	r.nextRotorSpin = addWithOverflow(r.nextRotorSpin, 1, 26)
 }
 
 func getThroughPlugboardF(letterMap *obfuscatorMap, letterIn int) int {
@@ -95,5 +96,6 @@ func getThroughPlugboardB(letterMap *obfuscatorMap, letterIn int) int {
 func getThroughReflector(givenReflector map[int]int, rotorOut int) int {
 	// Reflector is just a limited rotor, but with a limitation...
 	// No letter can map to itself, a cryptographic weakness caused by the same wires being used for forwards and backwards legs.
+	// Make sure your reflector slice is physically possible to avoid bugs
 	return givenReflector[rotorOut]
 }

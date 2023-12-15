@@ -23,3 +23,9 @@ type rotor struct {
 	rotorSpinOffset int            // Basically the offset, or the spin of the rotor.
 	nextRotorSpin   int            // Determines whether to increment the next rotor's spin, basically the 'notch'.
 }
+
+// Add a rotate method to the rotor struct
+func (r *rotor) rotate() {
+	r.rotorSpinOffset = addWithOverflow(r.rotorSpinOffset, 1, 26)
+	r.nextRotorSpin = addWithOverflow(r.nextRotorSpin, 1, 26)
+}
