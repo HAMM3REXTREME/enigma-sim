@@ -2,9 +2,13 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"strings"
+	"time"
 	"unicode"
 )
+
+// TEST ENCRYPTION
 
 /*
 ENIGMA Machine Diagram:
@@ -18,14 +22,14 @@ Keyboard-----> Plugboard <-----> Rotor-1 <-----> Rotor-2 <-----> Rotor-3 <----->
 
 func main() {
 	// Test data for obfuscatorMap (Plugboard)
-	plugboardData := map[int]int{
-		1: 5, 2: 10, 3: 15, 4: 20, 5: 1,
-		6: 6, 7: 11, 8: 16, 9: 21, 10: 2,
-		11: 7, 12: 12, 13: 17, 14: 22, 15: 3,
-		16: 8, 17: 13, 18: 18, 19: 23, 20: 4,
-		21: 9, 22: 14, 23: 19, 24: 24, 25: 25, 26: 26,
-	}
-	plugboard := newBimap(plugboardData)
+	/* 	plugboardData := map[int]int{
+	   		1: 5, 2: 10, 3: 15, 4: 20, 5: 1,
+	   		6: 6, 7: 11, 8: 16, 9: 21, 10: 2,
+	   		11: 7, 12: 12, 13: 17, 14: 22, 15: 3,
+	   		16: 8, 17: 13, 18: 18, 19: 23, 20: 4,
+	   		21: 9, 22: 14, 23: 19, 24: 24, 25: 25, 26: 26,
+	   	}
+	   	plugboard := newBimap(plugboardData) */
 
 	// Test data for rotor 1
 	rotor1Data := map[int]int{
@@ -38,7 +42,7 @@ func main() {
 	rotor1 := &rotor{
 		rotorMap:        newBimap(rotor1Data),
 		rotorSpinOffset: 1,
-		nextRotorSpin:   5,
+		nextRotorSpin:   10,
 	}
 
 	// Test data for rotor 2
@@ -65,20 +69,21 @@ func main() {
 	}
 	rotor3 := &rotor{
 		rotorMap:        newBimap(rotor3Data),
-		rotorSpinOffset: 10,
-		nextRotorSpin:   0,
+		rotorSpinOffset: 1,
+		nextRotorSpin:   10,
 	}
 	rotorArray := [3]*rotor{rotor1, rotor2, rotor3}
 
-	reflector := map[int]int{
-		1: 15, 2: 20, 3: 1, 4: 6, 5: 11,
-		6: 16, 7: 21, 8: 2, 9: 7, 10: 12,
-		11: 17, 12: 22, 13: 3, 14: 8, 15: 13,
-		16: 18, 17: 23, 18: 4, 19: 9, 20: 14,
-		21: 19, 22: 24, 23: 25, 24: 26, 25: 5, 26: 10}
+	/* 	reflector := map[int]int{
+	1: 15, 2: 20, 3: 1, 4: 6, 5: 11,
+	6: 16, 7: 21, 8: 2, 9: 7, 10: 12,
+	11: 17, 12: 22, 13: 3, 14: 8, 15: 13,
+	16: 18, 17: 23, 18: 4, 19: 9, 20: 14,
+	21: 19, 22: 24, 23: 25, 24: 26, 25: 5, 26: 10} */
 
 	for {
-		userInput(plugboard, rotorArray, reflector)
+		test(rotorArray)
+		//userInput(plugboard, rotorArray, reflector)
 		//debugObfuscateFull(plugboard, rotorArray, []string{"H", "I", "L", "E", "R"}, reflector)
 	}
 
@@ -90,7 +95,7 @@ func getFullEnigma(plugboard *obfuscatorMap, rotors [3]*rotor, strList []string,
 		char := strList[i]
 		updateRotors(rotors)
 
-		num, _ := getLetterNumberByChar(char)
+		num, err := getLetterNumberByChar(char)
 
 		num = getThroughPlugboardF(plugboard, num)
 		num = getThroughRotorsF(rotors, num)
@@ -98,7 +103,11 @@ func getFullEnigma(plugboard *obfuscatorMap, rotors [3]*rotor, strList []string,
 		num = getThroughRotorsB(rotors, num)
 		num = getThroughPlugboardB(plugboard, num)
 
-		char, _ = getCharByNumber(num)
+		char, err = getCharByNumber(num)
+		if err != nil {
+			fmt.Printf("SERIOUS OOPSIE! Error converting number %d to character.\n", num)
+			return enigmaList
+		}
 		enigmaList[i] = char
 
 	}
@@ -123,10 +132,10 @@ func userInput(plugboard *obfuscatorMap, rotorArray [3]*rotor, reflector map[int
 	userInput = strings.ToUpper(userInput)
 	userInputChars := strings.Split(userInput, "")
 
-	enigmaOutput := getFullEnigma(plugboard, rotorArray, userInputChars, reflector)
-	//debugObfuscateFull(plugboard, rotorArray, userInputChars, reflector)
+	//enigmaOutput := getFullEnigma(plugboard, rotorArray, userInputChars, reflector)
+	debugObfuscateFull(plugboard, rotorArray, userInputChars, reflector)
 
-	fmt.Printf("ENIGMA output: %s\n", strings.Join(enigmaOutput, ""))
+	//fmt.Printf("ENIGMA output: %s\n", strings.Join(enigmaOutput, ""))
 }
 
 func isValidInput(input string) bool {
@@ -136,4 +145,26 @@ func isValidInput(input string) bool {
 		}
 	}
 	return true
+}
+
+func testAdding() {
+	// Passed
+	rand.Seed(time.Now().UnixNano())
+	a := rand.Intn(26) + 1
+	b := rand.Intn(26) + 1
+	ans := addWithOverflow(a, b, 26)
+	fmt.Printf("Overflow test: %d + %d = %d...\n", a, b, ans)
+	if ans <= 0 || ans > 26 {
+		fmt.Printf("---------------------------SOME BUG DETECTED\n")
+	}
+}
+
+func test(testArray [3]*rotor) {
+	updateRotors(testArray)
+	//fmt.Printf("Rotors Dump: %s", testArray)
+	for i := 0; i < len(testArray); i++ {
+		fmt.Printf("ROTOR #%d Spin: %d    |    ", i, testArray[i].rotorSpinOffset)
+	}
+	fmt.Println()
+
 }
