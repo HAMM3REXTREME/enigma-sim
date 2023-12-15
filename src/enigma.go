@@ -50,7 +50,7 @@ func getThroughRotorsB(rotorArray [3]*rotor, letterID int) int {
 	letterSignal := letterID
 	for i := len(rotorArray) - 1; i >= 0; i-- {
 		// Adjust the rotor position to consider rotorSpinOffset
-		adjustedSignal := addWithOverflow(letterSignal, -(rotorArray[i].rotorSpinOffset - 1), 26)
+		adjustedSignal := addWithOverflow(letterSignal, rotorArray[i].rotorSpinOffset-1, 26)
 		fmt.Printf("    ROTOR #%d: Input is letter at #%d plus offset %d--> Really: %d\n", i, letterSignal, rotorArray[i].rotorSpinOffset-1, adjustedSignal)
 		letterSignal = rotorArray[i].rotorMap.backward[adjustedSignal]
 		fmt.Printf("    ROTOR #%d : Output is letter #%d\n", i, letterSignal)
