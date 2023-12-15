@@ -6,7 +6,7 @@ func debugObfuscateFull(plugboard *obfuscatorMap, rotors [3]*rotor, strList []st
 	for i := 0; i < len(strList); i++ {
 		char := strList[i]
 		num, _ := getLetterNumberByChar(char)
-		updateRotors(rotors)
+		incrementRotors(rotors)
 		fmt.Printf("INPUT: Letter #%d is '%s' \n", num, char)
 
 		fmt.Printf("Plugboard forward %d-->", num)

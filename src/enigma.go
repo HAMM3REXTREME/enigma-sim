@@ -4,7 +4,7 @@ func getFullEnigma(plugboard *obfuscatorMap, rotors [3]*rotor, strList []string,
 	enigmaList := make([]string, len(strList))
 	for i := 0; i < len(strList); i++ {
 		char := strList[i]
-		updateRotors(rotors)
+		incrementRotors(rotors)
 
 		num, _ := getLetterNumberByChar(char)
 
@@ -21,7 +21,7 @@ func getFullEnigma(plugboard *obfuscatorMap, rotors [3]*rotor, strList []string,
 	return enigmaList
 }
 
-func updateRotors(rotorArray [3]*rotor) {
+func incrementRotors(rotorArray [3]*rotor) {
 	// Increment the position of the first rotor
 	rotorArray[0].rotorSpinOffset = addWithOverflow(rotorArray[0].rotorSpinOffset, 1, 26)
 

@@ -197,7 +197,7 @@ func testAdding() {
 }
 
 func test(testArray [3]*rotor) {
-	updateRotors(testArray)
+	incrementRotors(testArray)
 	//fmt.Printf("Rotors Dump: %s", testArray)
 	for i := 0; i < len(testArray); i++ {
 		fmt.Printf("ROTOR #%d Spin: %d    |    ", i+1, testArray[i].rotorSpinOffset)
