@@ -37,10 +37,14 @@ func getThroughRotorsF(rotorArray [3]*rotor, letterID int) int {
 		fmt.Printf("    ROTOR #%d: Input is letter at #%d plus offset %d--> Really: %d\n", i, letterSignal, rotorArray[i].rotorSpinOffset-1, adjustedSignal)
 		letterSignal = rotorArray[i].rotorMap.forward[adjustedSignal]
 		fmt.Printf("    ROTOR #%d : Output is letter #%d\n", i, letterSignal)
+
+		// Check for rotor rotation
+		if i == len(rotorArray)-1 {
+			rotorArray[i].rotate()
+		}
 	}
 	fmt.Println()
 	return letterSignal
-
 }
 
 func getThroughRotorsB(rotorArray [3]*rotor, letterID int) int {
@@ -50,14 +54,24 @@ func getThroughRotorsB(rotorArray [3]*rotor, letterID int) int {
 	letterSignal := letterID
 	for i := len(rotorArray) - 1; i >= 0; i-- {
 		// Adjust the rotor position to consider rotorSpinOffset
-		adjustedSignal := addWithOverflow(letterSignal, rotorArray[i].rotorSpinOffset-1, 26)
+		adjustedSignal := addWithOverflow(letterSignal, -(rotorArray[i].rotorSpinOffset - 1), 26)
 		fmt.Printf("    ROTOR #%d: Input is letter at #%d plus offset %d--> Really: %d\n", i, letterSignal, rotorArray[i].rotorSpinOffset-1, adjustedSignal)
 		letterSignal = rotorArray[i].rotorMap.backward[adjustedSignal]
 		fmt.Printf("    ROTOR #%d : Output is letter #%d\n", i, letterSignal)
+
+		// Check for rotor rotation
+		if i == 0 {
+			rotorArray[i].rotate()
+		}
 	}
 	fmt.Println()
 	return letterSignal
+}
 
+// Add a rotate method to the rotor struct
+func (r *rotor) rotate() {
+	r.rotorSpinOffset = addWithOverflow(r.rotorSpinOffset, 1, 26)
+	r.nextRotorSpin = addWithOverflow(r.nextRotorSpin, 1, 26)
 }
 
 func getThroughPlugboardF(letterMap *obfuscatorMap, letterIn int) int {
