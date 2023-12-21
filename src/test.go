@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"math/rand"
-	"strings"
 	"time"
 )
 
@@ -19,17 +18,16 @@ ENIGMA Machine Diagram:
 Keyboard-----> Plugboard <-----> Rotor-1 <-----> Rotor-2 <-----> Rotor-3 <-----> Reflector
 */
 
-
-func main() {
-/* 	 	// Test data for obfuscatorMap (Plugboard)
-	   	plugboardData := map[int]int{
-	   		1: 5, 2: 10, 3: 15, 4: 20, 5: 1,
-	   		6: 6, 7: 11, 8: 16, 9: 21, 10: 2,
-	   		11: 7, 12: 12, 13: 17, 14: 22, 15: 3,
-	   		16: 8, 17: 13, 18: 18, 19: 23, 20: 4,
-	   		21: 9, 22: 14, 23: 19, 24: 24, 25: 25, 26: 26,
-	   	}
-	   	plugboard := newBimap(plugboardData)  */
+func mainTest() {
+	/* 	 	// Test data for obfuscatorMap (Plugboard)
+	plugboardData := map[int]int{
+		1: 5, 2: 10, 3: 15, 4: 20, 5: 1,
+		6: 6, 7: 11, 8: 16, 9: 21, 10: 2,
+		11: 7, 12: 12, 13: 17, 14: 22, 15: 3,
+		16: 8, 17: 13, 18: 18, 19: 23, 20: 4,
+		21: 9, 22: 14, 23: 19, 24: 24, 25: 25, 26: 26,
+	}
+	plugboard := newBimap(plugboardData)  */
 
 	// Test data for rotor 1
 	rotor1Data := map[int]int{
@@ -75,45 +73,21 @@ func main() {
 	rotorArray := []*rotor{rotor1, rotor2, rotor3}
 
 	// Very important for this to correct
-/* 	// if x maps to y then y must map to x else you gonna get bugs
-		reflector := map[int]int{
-		1: 5, 2: 10, 3: 15, 4: 20, 5: 1,
-		6: 6, 7: 11, 8: 16, 9: 21, 10: 2,
-		11: 7, 12: 12, 13: 17, 14: 22, 15: 3,
-		16: 8, 17: 13, 18: 18, 19: 23, 20: 4,
-		21: 9, 22: 14, 23: 19, 24: 24, 25: 25, 26: 26,
-	}
- */
+	/* 	// if x maps to y then y must map to x else you gonna get bugs
+	   		reflector := map[int]int{
+	   		1: 5, 2: 10, 3: 15, 4: 20, 5: 1,
+	   		6: 6, 7: 11, 8: 16, 9: 21, 10: 2,
+	   		11: 7, 12: 12, 13: 17, 14: 22, 15: 3,
+	   		16: 8, 17: 13, 18: 18, 19: 23, 20: 4,
+	   		21: 9, 22: 14, 23: 19, 24: 24, 25: 25, 26: 26,
+	   	}
+	*/
 	for {
 		test(rotorArray)
 		//userInput(plugboard, rotorArray, reflector)
 		//debugObfuscateFull(plugboard, rotorArray, []string{"H", "I", "L", "E", "R"}, reflector)
 	}
 
-}
-
-func userInput(plugboard *obfuscatorMap, rotorArray []*rotor, reflector map[int]int) {
-	var userInput string
-	validInput := false
-
-	for !validInput {
-		fmt.Print("Enter a message to encrypt with the ENIGMA machine (only A-Z or a-z allowed): ")
-		fmt.Scanln(&userInput)
-
-		// Check if the input contains only A-Z or a-z characters
-		validInput = isValidInput(userInput)
-		if !validInput {
-			fmt.Println("Invalid input. Please enter only A-Z or a-z characters.")
-		}
-	}
-
-	userInput = strings.ToUpper(userInput)
-	userInputChars := strings.Split(userInput, "")
-
-	//enigmaOutput := getFullEnigma(plugboard, rotorArray, userInputChars, reflector)
-	debugObfuscateFull(plugboard, rotorArray, userInputChars, reflector)
-
-	//fmt.Printf("ENIGMA output: %s\n", strings.Join(enigmaOutput, ""))
 }
 
 func testAdding() {
@@ -136,4 +110,84 @@ func test(testArray []*rotor) {
 	}
 	fmt.Println()
 
+}
+
+func debugObfuscateF(plugboard *obfuscatorMap, rotors []*rotor, strList []string, reflectorMap map[int]int) {
+	for i := 0; i < len(strList); i++ {
+		char := strList[i]
+		num, _ := getLetterNumberByChar(char)
+		//incrementRotors(rotors)
+		fmt.Printf("INPUT: Letter #%d is '%s' \n", num, char)
+
+		//fmt.Printf("Plugboard forward %d-->", num)
+		//num = getThroughPlugboardF(plugboard, num)
+		//char, _ = getCharByNumber(num)
+		//fmt.Printf("%d which is %s\n", num, char)
+
+		fmt.Printf("Rotors forward %d-->", num)
+
+		num = getThroughRotorsF(rotors, num)
+		char, _ = getCharByNumber(num)
+		fmt.Printf("%d which is %s\n", num, char)
+
+		/* 		fmt.Printf("Reflector %d-->", num)
+		   		num = getThroughReflector(reflectorMap, num)
+		   		char, _ = getCharByNumber(num)
+		   		fmt.Printf("%d which is %s\n", num, char)
+
+		   		fmt.Printf("Rotors reverse %d-->", num)
+
+		   		num = getThroughRotorsB(rotors, num)
+		   		char, _ = getCharByNumber(num)
+		   		fmt.Printf("%d which is %s\n", num, char)
+
+		   		fmt.Printf("Plugboard reverse %d-->", num)
+		   		num = getThroughPlugboardB(plugboard, num)
+		   		char, _ = getCharByNumber(num)
+		   		fmt.Printf("%d which is %s\n", num, char) */
+
+		fmt.Printf("F: Encrypted letter is #%d which is '%s'\n", num, char)
+		fmt.Println()
+
+	}
+}
+
+func debugObfuscateB(plugboard *obfuscatorMap, rotors []*rotor, strList []string, reflectorMap map[int]int) {
+	for i := 0; i < len(strList); i++ {
+		char := strList[i]
+		num, _ := getLetterNumberByChar(char)
+		//incrementRotors(rotors)
+		fmt.Printf("INPUT: Letter #%d is '%s' \n", num, char)
+		/*
+			fmt.Printf("Plugboard forward %d-->", num)
+			num = getThroughPlugboardF(plugboard, num)
+			char, _ = getCharByNumber(num)
+			fmt.Printf("%d which is %s\n", num, char)
+
+			fmt.Printf("Rotors forward %d-->", num)
+
+			num = getThroughRotorsF(rotors, num)
+			char, _ = getCharByNumber(num)
+			fmt.Printf("%d which is %s\n", num, char) */
+
+		//fmt.Printf("Reflector %d-->", num)
+		//num = getThroughReflector(reflectorMap, num)
+		//char, _ = getCharByNumber(num)
+		//fmt.Printf("%d which is %s\n", num, char)
+
+		fmt.Printf("Rotors reverse %d-->", num)
+
+		num = getThroughRotorsB(rotors, num)
+		char, _ = getCharByNumber(num)
+		fmt.Printf("%d which is %s\n", num, char)
+
+		//fmt.Printf("Plugboard reverse %d-->", num)
+		//num = getThroughPlugboardB(plugboard, num)
+		//char, _ = getCharByNumber(num)
+		//fmt.Printf("%d which is %s\n", num, char)
+
+		fmt.Printf("B: Encrypted letter is #%d which is '%s'\n", num, char)
+		fmt.Println()
+
+	}
 }

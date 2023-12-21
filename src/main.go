@@ -36,7 +36,7 @@ func main() {
 	}
 	rotor1 := &rotor{
 		rotorMap:        newBimap(rotor1Data),
-		rotorSpinOffset: 1,
+		rotorSpinOffset: 9,
 		nextRotorSpin:   5,
 	}
 
@@ -50,7 +50,7 @@ func main() {
 	}
 	rotor2 := &rotor{
 		rotorMap:        newBimap(rotor2Data),
-		rotorSpinOffset: 1,
+		rotorSpinOffset: 9,
 		nextRotorSpin:   10,
 	}
 
@@ -64,7 +64,7 @@ func main() {
 	}
 	rotor3 := &rotor{
 		rotorMap:        newBimap(rotor3Data),
-		rotorSpinOffset: 10,
+		rotorSpinOffset: 3,
 		nextRotorSpin:   0,
 	}
 	rotorArray := []*rotor{rotor1, rotor2, rotor3}
@@ -104,8 +104,8 @@ func userInput(plugboard *obfuscatorMap, rotorArray []*rotor, reflector map[int]
 	userInput = strings.ToUpper(userInput)
 	userInputChars := strings.Split(userInput, "")
 
-	//enigmaOutput := getFullEnigma(plugboard, rotorArray, userInputChars, reflector)
-	debugObfuscateFull(plugboard, rotorArray, userInputChars, reflector)
+	enigmaOutput := getFullEnigma(plugboard, rotorArray, userInputChars, reflector)
+	//debugObfuscateFull(plugboard, rotorArray, userInputChars, reflector)
 
-	//fmt.Printf("ENIGMA output: %s\n", strings.Join(enigmaOutput, ""))
+	fmt.Printf("ENIGMA output: %s\n", strings.Join(enigmaOutput, ""))
 }

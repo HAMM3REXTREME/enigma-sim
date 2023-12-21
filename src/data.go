@@ -24,3 +24,16 @@ type rotor struct {
 	nextRotorSpin   int            // Determines whether to increment the next rotor's spin, basically the 'notch'.
 }
 
+func (r *rotor) letterF(letterID int) int {
+	offsetSignal := addWithOverflow(letterID, r.rotorSpinOffset-1, 26)
+	finalSignal := addWithOverflow(r.rotorMap.forward[offsetSignal], r.rotorSpinOffset-1, 26)
+	//fmt.Printf("    ROTOR: Input is %d which goes f(%d)+%d to get output %d.\n", letterID, offsetSignal, r.rotorSpinOffset-1, finalSignal)
+	return finalSignal
+}
+
+func (r *rotor) letterB(letterID int) int {
+	offsetSignal := addWithOverflow(letterID, -(r.rotorSpinOffset - 1), 26)
+	finalSignal := addWithOverflow(r.rotorMap.backward[offsetSignal], -(r.rotorSpinOffset - 1), 26)
+	//fmt.Printf("    ROTOR: Input is %d which goes b(%d)-%d to get output %d.\n", letterID, offsetSignal, r.rotorSpinOffset-1, finalSignal)
+	return finalSignal
+}
