@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strings"
 )
 
 func userEnigmaInput(plugboard *obfuscatorMap, rotorArray []*rotor, reflector map[int]int) {
@@ -20,11 +19,8 @@ func userEnigmaInput(plugboard *obfuscatorMap, rotorArray []*rotor, reflector ma
 		}
 	}
 
-	userInput = strings.ToUpper(userInput)
-	//userInputChars := strings.Split(userInput, "")
-
-	enigmaOutput := stringEnigma(plugboard, rotorArray, reflector, userInput)
 	//debugObfuscateFull(plugboard, rotorArray, userInputChars, reflector)
+	enigmaOutput := stringEnigma(plugboard, rotorArray, reflector, userInput)
 
 	fmt.Printf("ENIGMA output: %s\n", string(enigmaOutput))
 }

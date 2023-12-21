@@ -1,8 +1,8 @@
 package main
 
 func stringEnigma(plugboard *obfuscatorMap, rotors []*rotor, reflectorMap map[int]int, stringInput string) []rune {
-	//enigmaList := make([]string, len(strList))
 	enigmaRune := []rune(stringInput)
+	// Go through every letter in the given string
 	for i := 0; i < len(enigmaRune); i++ {
 		char := enigmaRune[i]
 		incrementRotors(rotors)
