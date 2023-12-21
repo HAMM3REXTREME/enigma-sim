@@ -13,6 +13,7 @@ func addWithOverflow(a, b, modulus int) int {
 }
 
 func isValidInput(input string) bool {
+	// Only allow A to Z (case insensitive)
 	for _, char := range input {
 		if !unicode.IsLetter(char) {
 			return false

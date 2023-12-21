@@ -1,3 +1,3 @@
-module example.com/enigma-go
+module github.com/HAMM3REXTREME/enigma-sim
 
 go 1.21.5

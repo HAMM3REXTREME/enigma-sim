@@ -24,7 +24,25 @@ type rotor struct {
 	nextRotorSpin   int            // Determines whether to increment the next rotor's spin, basically the 'notch'.
 }
 
-func (r *rotor) signalLetterF(letterID int) int {
+func (letterMap *obfuscatorMap) throughMapF(letterIn int) int {
+	// This function returns a letter num only if present in the given 'plugboard'
+	// Otherwise returns the same letter as provided since nothing is plugged into our hypothetical ENIGMA plugboard
+	if mappedLetter, ok := letterMap.forward[letterIn]; ok {
+		return mappedLetter // Return the mapped letter if present
+	}
+	return letterIn // Return the same letter if not present in the plugboard
+}
+
+func (letterMap *obfuscatorMap) throughMapB(letterIn int) int {
+	// This function returns a letter num only if present in the provided 'plugboard'
+	// Otherwise returns the same letter as provided since nothing is plugged into our hypothetical ENIGMA plugboard
+	if mappedLetter, ok := letterMap.backward[letterIn]; ok {
+		return mappedLetter // Return the mapped letter if present
+	}
+	return letterIn // Return the same letter if not present in the plugboard
+}
+
+func (r *rotor) throughRotorF(letterID int) int {
 	// Pass a letter signal forward to backward considering spin offset.
 	// Off-by-one errors can be really hard to diagnose here.
 
@@ -37,7 +55,7 @@ func (r *rotor) signalLetterF(letterID int) int {
 	return finalSignal
 }
 
-func (r *rotor) signalLetterB(letterID int) int {
+func (r *rotor) throughRotorB(letterID int) int {
 	// Pass a letter signal backward to forward considering spin offset.
 	// Off-by-one errors can be really hard to diagnose here.
 

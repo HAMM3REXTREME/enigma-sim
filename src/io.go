@@ -8,9 +8,9 @@ import (
 // The ENIGMA machine rotors were made fairly useless (weak) for large letter sets because of their cyclic nature.
 // So I have not bothered to 'improve' them in any way since this is just a simulator, and I have limited it to 26 letters.
 
-func getLetterNumberByChar(char string) (int, error) {
+func char2num(char string) (int, error) {
 	// The original ENIGMA machine only dealt with the 26 letters of the english alphabet.
-	// This function will return the english alphabet number (1 to 26)...
+	// This function will return the english alphabet number (1 to 26) from a string with len=1
 	// ...only if the provided string is 1 character long and is a valid letter.
 	// Useful to take user input and convert it to ENIGMA rotor positions.
 
@@ -29,8 +29,7 @@ func getLetterNumberByChar(char string) (int, error) {
 	return number, nil
 }
 
-func getCharByNumber(number int) (string, error) {
-	// Basically the reverse of getLetterNumberByChar()
+func num2char(number int) (string, error) {
 	// This function will return the UPPERCASE English alphabet letter corresponding to the provided number (1 to 26).
 
 	// Check if the number is within the valid range of 1 to 26

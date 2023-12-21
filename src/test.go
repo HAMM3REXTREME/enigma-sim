@@ -115,35 +115,35 @@ func test(testArray []*rotor) {
 func debugObfuscateF(plugboard *obfuscatorMap, rotors []*rotor, strList []string, reflectorMap map[int]int) {
 	for i := 0; i < len(strList); i++ {
 		char := strList[i]
-		num, _ := getLetterNumberByChar(char)
+		num, _ := char2num(char)
 		//incrementRotors(rotors)
 		fmt.Printf("INPUT: Letter #%d is '%s' \n", num, char)
 
 		//fmt.Printf("Plugboard forward %d-->", num)
 		//num = getThroughPlugboardF(plugboard, num)
-		//char, _ = getCharByNumber(num)
+		//char, _ = num2char(num)
 		//fmt.Printf("%d which is %s\n", num, char)
 
 		fmt.Printf("Rotors forward %d-->", num)
 
-		num = getThroughRotorsF(rotors, num)
-		char, _ = getCharByNumber(num)
+		num = throughRotorsF(rotors, num)
+		char, _ = num2char(num)
 		fmt.Printf("%d which is %s\n", num, char)
 
 		/* 		fmt.Printf("Reflector %d-->", num)
 		   		num = getThroughReflector(reflectorMap, num)
-		   		char, _ = getCharByNumber(num)
+		   		char, _ = num2char(num)
 		   		fmt.Printf("%d which is %s\n", num, char)
 
 		   		fmt.Printf("Rotors reverse %d-->", num)
 
-		   		num = getThroughRotorsB(rotors, num)
-		   		char, _ = getCharByNumber(num)
+		   		num = throughRotorsB(rotors, num)
+		   		char, _ = num2char(num)
 		   		fmt.Printf("%d which is %s\n", num, char)
 
 		   		fmt.Printf("Plugboard reverse %d-->", num)
 		   		num = getThroughPlugboardB(plugboard, num)
-		   		char, _ = getCharByNumber(num)
+		   		char, _ = num2char(num)
 		   		fmt.Printf("%d which is %s\n", num, char) */
 
 		fmt.Printf("F: Encrypted letter is #%d which is '%s'\n", num, char)
@@ -155,35 +155,35 @@ func debugObfuscateF(plugboard *obfuscatorMap, rotors []*rotor, strList []string
 func debugObfuscateB(plugboard *obfuscatorMap, rotors []*rotor, strList []string, reflectorMap map[int]int) {
 	for i := 0; i < len(strList); i++ {
 		char := strList[i]
-		num, _ := getLetterNumberByChar(char)
+		num, _ := char2num(char)
 		//incrementRotors(rotors)
 		fmt.Printf("INPUT: Letter #%d is '%s' \n", num, char)
 		/*
 			fmt.Printf("Plugboard forward %d-->", num)
 			num = getThroughPlugboardF(plugboard, num)
-			char, _ = getCharByNumber(num)
+			char, _ = num2char(num)
 			fmt.Printf("%d which is %s\n", num, char)
 
 			fmt.Printf("Rotors forward %d-->", num)
 
-			num = getThroughRotorsF(rotors, num)
-			char, _ = getCharByNumber(num)
+			num = throughRotorsF(rotors, num)
+			char, _ = num2char(num)
 			fmt.Printf("%d which is %s\n", num, char) */
 
 		//fmt.Printf("Reflector %d-->", num)
 		//num = getThroughReflector(reflectorMap, num)
-		//char, _ = getCharByNumber(num)
+		//char, _ = num2char(num)
 		//fmt.Printf("%d which is %s\n", num, char)
 
 		fmt.Printf("Rotors reverse %d-->", num)
 
-		num = getThroughRotorsB(rotors, num)
-		char, _ = getCharByNumber(num)
+		num = throughRotorsB(rotors, num)
+		char, _ = num2char(num)
 		fmt.Printf("%d which is %s\n", num, char)
 
 		//fmt.Printf("Plugboard reverse %d-->", num)
 		//num = getThroughPlugboardB(plugboard, num)
-		//char, _ = getCharByNumber(num)
+		//char, _ = num2char(num)
 		//fmt.Printf("%d which is %s\n", num, char)
 
 		fmt.Printf("B: Encrypted letter is #%d which is '%s'\n", num, char)

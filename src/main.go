@@ -1,10 +1,5 @@
 package main
 
-import (
-	"fmt"
-	"strings"
-)
-
 /*
 ENIGMA Machine Diagram:
 
@@ -26,7 +21,6 @@ func main() {
 	}
 	plugboard := newBimap(plugboardData)
 
-	// Test data for rotor 1
 	rotor1Data := map[int]int{
 		1: 5, 2: 10, 3: 15, 4: 20, 5: 1,
 		6: 6, 7: 11, 8: 16, 9: 21, 10: 2,
@@ -40,7 +34,6 @@ func main() {
 		nextRotorSpin:   5,
 	}
 
-	// Test data for rotor 2
 	rotor2Data := map[int]int{
 		1: 10, 2: 15, 3: 20, 4: 1, 5: 6,
 		6: 11, 7: 16, 8: 21, 9: 2, 10: 7,
@@ -54,7 +47,6 @@ func main() {
 		nextRotorSpin:   10,
 	}
 
-	// Test data for rotor 3
 	rotor3Data := map[int]int{
 		1: 15, 2: 20, 3: 1, 4: 6, 5: 11,
 		6: 16, 7: 21, 8: 2, 9: 7, 10: 12,
@@ -84,28 +76,4 @@ func main() {
 		//debugObfuscateFull(plugboard, rotorArray, []string{"H", "I", "L", "E", "R"}, reflector)
 	}
 
-}
-
-func userInput(plugboard *obfuscatorMap, rotorArray []*rotor, reflector map[int]int) {
-	var userInput string
-	validInput := false
-
-	for !validInput {
-		fmt.Print("Enter a message to encrypt with the ENIGMA machine (only A-Z or a-z allowed): ")
-		fmt.Scanln(&userInput)
-
-		// Check if the input contains only A-Z or a-z characters
-		validInput = isValidInput(userInput)
-		if !validInput {
-			fmt.Println("Invalid input. Please enter only A-Z or a-z characters.")
-		}
-	}
-
-	userInput = strings.ToUpper(userInput)
-	userInputChars := strings.Split(userInput, "")
-
-	enigmaOutput := getFullEnigma(plugboard, rotorArray, userInputChars, reflector)
-	//debugObfuscateFull(plugboard, rotorArray, userInputChars, reflector)
-
-	fmt.Printf("ENIGMA output: %s\n", strings.Join(enigmaOutput, ""))
 }
