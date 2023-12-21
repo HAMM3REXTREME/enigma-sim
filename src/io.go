@@ -15,7 +15,7 @@ func char2num(char rune) (int, error) {
 	// Useful to take user input and convert it to ENIGMA rotor positions.
 
 	if !unicode.IsLetter(char) { // this part is case insensitive
-		return 0, errors.New("Input must be a valid English alphabet letter")
+		return 0, errors.New("input must be a valid english alphabet letter")
 	}
 
 	upperChar := unicode.ToUpper(char) // Convert the character to uppercase cause it doesn't matter for us.
@@ -29,7 +29,7 @@ func num2char(number int) (rune, error) {
 
 	// Check if the number is within the valid range of 1 to 26
 	if number < 1 || number > 26 {
-		return 0, errors.New("Letter Input must be between 1 and 26")
+		return 0, errors.New("letter input must be between 1 and 26")
 	}
 
 	char := rune('A' + number - 1) // Convert the number to the corresponding uppercase English alphabet letter
