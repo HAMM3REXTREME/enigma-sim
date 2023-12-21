@@ -1,9 +1,10 @@
 package main
 
-func stringEnigma(plugboard *obfuscatorMap, rotors []*rotor, reflectorMap map[int]int, strList []string) []string {
-	enigmaList := make([]string, len(strList))
-	for i := 0; i < len(strList); i++ {
-		char := strList[i]
+func stringEnigma(plugboard *obfuscatorMap, rotors []*rotor, reflectorMap map[int]int, stringInput string) []rune {
+	//enigmaList := make([]string, len(strList))
+	enigmaRune := []rune(stringInput)
+	for i := 0; i < len(enigmaRune); i++ {
+		char := enigmaRune[i]
 		incrementRotors(rotors)
 
 		num, _ := char2num(char)
@@ -14,11 +15,10 @@ func stringEnigma(plugboard *obfuscatorMap, rotors []*rotor, reflectorMap map[in
 		num = throughRotorsB(rotors, num)
 		num = plugboard.throughMapB(num)
 
-		char, _ = num2char(num)
-		enigmaList[i] = char
+		enigmaRune[i], _ = num2char(num)
 
 	}
-	return enigmaList
+	return enigmaRune
 }
 
 func incrementRotors(rotorArray []*rotor) {

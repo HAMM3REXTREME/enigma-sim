@@ -72,7 +72,7 @@ func main() {
 	}
 
 	for {
-		userInput(plugboard, rotorArray, reflector)
+		userEnigmaInput(plugboard, rotorArray, reflector)
 		//debugObfuscateFull(plugboard, rotorArray, []string{"H", "I", "L", "E", "R"}, reflector)
 	}
 
