@@ -48,7 +48,7 @@ func getThroughRotorsF(rotorArray []*rotor, letterID int) int {
 
 	letterSignal := letterID
 	for i := 0; i < len(rotorArray); i++ {
-		letterSignal = rotorArray[i].letterF(letterSignal)
+		letterSignal = rotorArray[i].signalLetterF(letterSignal)
 
 	}
 	return letterSignal
@@ -60,7 +60,7 @@ func getThroughRotorsB(rotorArray []*rotor, letterID int) int {
 
 	letterSignal := letterID
 	for i := len(rotorArray) - 1; i >= 0; i-- {
-		letterSignal = rotorArray[i].letterB(letterSignal)
+		letterSignal = rotorArray[i].signalLetterB(letterSignal)
 
 	}
 	return letterSignal
