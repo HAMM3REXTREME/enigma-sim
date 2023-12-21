@@ -1,10 +1,11 @@
 package main
+import "fmt"
 
-func getFullEnigma(plugboard *obfuscatorMap, rotors [3]*rotor, strList []string, reflectorMap map[int]int) []string {
+func getFullEnigma(plugboard *obfuscatorMap, rotors []*rotor, strList []string, reflectorMap map[int]int) []string {
 	enigmaList := make([]string, len(strList))
 	for i := 0; i < len(strList); i++ {
 		char := strList[i]
-		incrementRotors(rotors)
+		//incrementRotors(rotors)
 
 		num, _ := getLetterNumberByChar(char)
 
@@ -21,21 +22,32 @@ func getFullEnigma(plugboard *obfuscatorMap, rotors [3]*rotor, strList []string,
 	return enigmaList
 }
 
-func incrementRotors(rotorArray [3]*rotor) {
+
+
+func incrementRotors(rotorArray []*rotor) {
 	// Increment the position of the first rotor
-	rotorArray[0].rotorSpinOffset = addWithOverflow(rotorArray[0].rotorSpinOffset, 1, 26)
+	//fmt.Println("Increment 1st rotor.")
+	rotorArray[0].rotorSpinOffset = addWithOverflow(rotorArray[0].rotorSpinOffset , 1,26)
 
 	// Check if the notch is reached for the next rotors and spin them accordingly
-	for i := 1; i < len(rotorArray); i++ {
-		if rotorArray[i-1].rotorSpinOffset == rotorArray[i-1].nextRotorSpin+1 {
-			// Spin the next rotor
-			rotorArray[i].rotorSpinOffset = addWithOverflow(rotorArray[i].rotorSpinOffset, 1, 26)
+	for i := 1; i < len(rotorArray)-1; i++ {
+		if rotorArray[i-1].rotorSpinOffset == rotorArray[i-1].nextRotorSpin {
+			// Increment the current rotor
+			//fmt.Printf("i: %d Incrementing rotor because prev. spin offset: %d\n", i, rotorArray[i-1].rotorSpinOffset)
+			rotorArray[i].rotorSpinOffset = addWithOverflow(rotorArray[i].rotorSpinOffset , 1,26)
+
+			// Check if the next rotor's notch is reached, then increment it
+			if rotorArray[i].rotorSpinOffset == rotorArray[i].nextRotorSpin {
+				//fmt.Printf("i: %d Incrementing next rotor because spin offset: %d matches nextRotorSpin: %d\n", i, rotorArray[i].rotorSpinOffset, rotorArray[i].nextRotorSpin)
+				rotorArray[i+1].rotorSpinOffset = addWithOverflow(rotorArray[i+1].rotorSpinOffset , 1,26)
+			}
 		}
 	}
-
 }
 
-func getThroughRotorsF(rotorArray [3]*rotor, letterID int) int {
+
+
+func getThroughRotorsF(rotorArray []*rotor, letterID int) int {
 	// This function only goes through the RotorArray First to Last
 	// Also do note that this does not go through the reflector.
 
@@ -43,34 +55,27 @@ func getThroughRotorsF(rotorArray [3]*rotor, letterID int) int {
 	for i := 0; i < len(rotorArray); i++ {
 		// Adjust the rotor position to consider rotorSpinOffset
 		adjustedSignal := addWithOverflow(letterSignal, rotorArray[i].rotorSpinOffset-1, 26)
-		//fmt.Printf("    ROTOR #%d: Input is letter at #%d plus offset %d--> Really: %d\n", i, letterSignal, rotorArray[i].rotorSpinOffset-1, adjustedSignal)
+		fmt.Printf("    ROTOR #%d: Input is letter at #%d plus offset %d--> Really: %d\n", i, letterSignal, rotorArray[i].rotorSpinOffset-1, adjustedSignal)
 		letterSignal = rotorArray[i].rotorMap.forward[adjustedSignal]
-		//fmt.Printf("    ROTOR #%d : Output is letter #%d\n", i, letterSignal)
+		fmt.Printf("    ROTOR #%d : Output is letter #%d\n", i, letterSignal)
 
-		// Check for rotor rotation
-		if i == len(rotorArray)-1 {
-			rotorArray[i].rotate()
-		}
 	}
 	return letterSignal
 }
 
-func getThroughRotorsB(rotorArray [3]*rotor, letterID int) int {
+func getThroughRotorsB(rotorArray []*rotor, letterID int) int {
 	// This function only goes through the RotorArray Last to First
 	// Also do note that this does not go through the reflector.
 
 	letterSignal := letterID
 	for i := len(rotorArray) - 1; i >= 0; i-- {
 		// Adjust the rotor position to consider rotorSpinOffset
-		adjustedSignal := addWithOverflow(letterSignal, -(rotorArray[i].rotorSpinOffset - 1), 26)
-		//fmt.Printf("    ROTOR #%d: Input is letter at #%d plus offset %d--> Really: %d\n", i, letterSignal, rotorArray[i].rotorSpinOffset-1, adjustedSignal)
+		adjustedSignal := addWithOverflow(letterSignal, (rotorArray[i].rotorSpinOffset - 1), 26)
+		fmt.Printf("    ROTOR #%d B: Input is letter at #%d plus offset %d--> Really: %d\n", i, letterSignal, rotorArray[i].rotorSpinOffset-1, adjustedSignal)
 		letterSignal = rotorArray[i].rotorMap.backward[adjustedSignal]
-		//fmt.Printf("    ROTOR #%d : Output is letter #%d\n", i, letterSignal)
+		fmt.Printf("    ROTOR #%d B: Output is letter #%d\n", i, letterSignal)
 
-		// Check for rotor rotation
-		if i == 0 {
-			rotorArray[i].rotate()
-		}
+
 	}
 	return letterSignal
 }
