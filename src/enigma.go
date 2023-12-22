@@ -6,9 +6,15 @@ func encryptText(plugboard *obfuscatorMap, rotors []*rotor, reflectorMap map[int
 	encryptedText := "" // Empty start
 
 	for _, char := range text {
-		if unicode.IsLetter(char) {
+		if unicode.IsLetter(char) { // Only encrypt letters
 			encryptedChar := encryptRune(plugboard, rotors, reflectorMap, char)
-			encryptedText += string(encryptedChar)
+
+			if unicode.IsLower(char) {
+				encryptedText += (string(unicode.ToLower(encryptedChar)))
+			} else {
+				encryptedText += string(encryptedChar)
+			}
+
 		} else {
 			encryptedText += string(char)
 		}
@@ -22,7 +28,7 @@ func encryptRune(plugboard *obfuscatorMap, rotors []*rotor, reflectorMap map[int
 	var newChar rune
 
 	incrementRotors(rotors)
-	num, _ := char2num(char)
+	num, _ := rune2num(char)
 
 	num = plugboard.throughMapF(num)
 	num = throughRotorsF(rotors, num)
@@ -30,24 +36,24 @@ func encryptRune(plugboard *obfuscatorMap, rotors []*rotor, reflectorMap map[int
 	num = throughRotorsB(rotors, num)
 	num = plugboard.throughMapB(num)
 
-	newChar, _ = num2char(num)
+	newChar, _ = num2rune(num)
 	return newChar
 }
 
 func incrementRotors(rotorArray []*rotor) {
 	// Increments rotors by modifying arg
-	rotorArray[0].rotorSpinOffset = addWithOverflow(rotorArray[0].rotorSpinOffset, 1, 26) // Increment the position of the first rotor
+	rotorArray[0].rotorSpinOffset = addWithOverflow(rotorArray[0].rotorSpinOffset, 1, Letters) // Increment the position of the first rotor
 
 	// Check if the notch is reached for the next rotors and spin them accordingly
 	for i := 1; i < len(rotorArray)-1; i++ {
 		if rotorArray[i-1].rotorSpinOffset == rotorArray[i-1].nextRotorSpin {
 			// Increment the current rotor
 			//fmt.Printf("i: %d Incrementing rotor because prev. spin offset: %d\n", i, rotorArray[i-1].rotorSpinOffset)
-			rotorArray[i].rotorSpinOffset = addWithOverflow(rotorArray[i].rotorSpinOffset, 1, 26)
+			rotorArray[i].rotorSpinOffset = addWithOverflow(rotorArray[i].rotorSpinOffset, 1, Letters)
 			// Check if the next rotor's notch is reached, then increment it
 			if rotorArray[i].rotorSpinOffset == rotorArray[i].nextRotorSpin {
 				//fmt.Printf("i: %d Incrementing next rotor because spin offset: %d matches nextRotorSpin: %d\n", i, rotorArray[i].rotorSpinOffset, rotorArray[i].nextRotorSpin)
-				rotorArray[i+1].rotorSpinOffset = addWithOverflow(rotorArray[i+1].rotorSpinOffset, 1, 26)
+				rotorArray[i+1].rotorSpinOffset = addWithOverflow(rotorArray[i+1].rotorSpinOffset, 1, Letters)
 			}
 		}
 	}
