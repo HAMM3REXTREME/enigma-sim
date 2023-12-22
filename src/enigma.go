@@ -3,10 +3,10 @@ package main
 import "unicode"
 
 func encryptText(plugboard *obfuscatorMap, rotors []*rotor, reflectorMap map[int]int, text string, matchCase bool) string {
-	encryptedText := "" // Empty start
+	encryptedText := "" // Our new encrypted text
 
 	for _, char := range text {
-		if unicode.IsLetter(char) { // Only encrypt letters
+		if unicode.IsLetter(char) { // Only try to encrypt letters
 			encryptedChar := encryptRune(plugboard, rotors, reflectorMap, char)
 
 			if unicode.IsLower(char) && matchCase { // Our new encrypted character should be lowercase if the starting character was lowercase and matchCase = true
@@ -31,9 +31,9 @@ func encryptRune(plugboard *obfuscatorMap, rotors []*rotor, reflectorMap map[int
 	num, _ := rune2num(char)
 
 	num = plugboard.throughMapF(num)
-	num = throughRotorsF(rotors, num)
+	num = throughRotorArrayF(rotors, num)
 	num = throughReflector(reflectorMap, num)
-	num = throughRotorsB(rotors, num)
+	num = throughRotorArrayB(rotors, num)
 	num = plugboard.throughMapB(num)
 
 	newChar, _ = num2rune(num)
@@ -59,7 +59,7 @@ func incrementRotors(rotorArray []*rotor) {
 	}
 }
 
-func throughRotorsF(rotorArray []*rotor, letterID int) int {
+func throughRotorArrayF(rotorArray []*rotor, letterID int) int {
 	// This function only goes through the RotorArray First to Last
 	// Also do note that this does not go through the reflector.
 
@@ -71,7 +71,7 @@ func throughRotorsF(rotorArray []*rotor, letterID int) int {
 	return letterSignal
 }
 
-func throughRotorsB(rotorArray []*rotor, letterID int) int {
+func throughRotorArrayB(rotorArray []*rotor, letterID int) int {
 	// This function only goes through the RotorArray Last to First
 	// Also do note that this does not go through the reflector.
 

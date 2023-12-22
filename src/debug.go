@@ -16,7 +16,7 @@ func debugObfuscateFull(plugboard *obfuscatorMap, rotors []*rotor, strList []run
 
 		fmt.Printf("Rotors forward %d-->", num)
 
-		num = throughRotorsF(rotors, num)
+		num = throughRotorArrayF(rotors, num)
 		char, _ = num2rune(num)
 		fmt.Printf("%d which is %c\n", num, char)
 
@@ -27,7 +27,7 @@ func debugObfuscateFull(plugboard *obfuscatorMap, rotors []*rotor, strList []run
 
 		fmt.Printf("Rotors reverse %d-->", num)
 
-		num = throughRotorsB(rotors, num)
+		num = throughRotorArrayB(rotors, num)
 		char, _ = num2rune(num)
 		fmt.Printf("%d which is %c\n", num, char)
 
