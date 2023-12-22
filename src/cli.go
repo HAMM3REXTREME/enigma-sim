@@ -4,12 +4,9 @@ import (
 	"fmt"
 )
 
-func userEnigmaInput(plugboard *obfuscatorMap, rotorArray []*rotor, reflector map[int]int) {
+func userEnigmaInput(machine *enigmaMachine) {
 	fmt.Printf("Enter text into the ENIGMA machine: ")
 	userInput := scanLine()
-
-	//debugObfuscateFull(plugboard, rotorArray, userInputChars, reflector)
-	enigmaOutput := encryptText(plugboard, rotorArray, reflector, userInput, true)
-
+	enigmaOutput := encryptText(*machine, userInput, true)
 	fmt.Printf("ENIGMA output: %s\n", string(enigmaOutput))
 }

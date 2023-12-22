@@ -4,7 +4,7 @@ package main
 
 import "fmt"
 
-func debugObfuscateFull(plugboard *obfuscatorMap, rotors []*rotor, strList []rune, reflectorMap map[int]int) {
+func debugObfuscateFull(plugboard *biMap, rotors []*rotor, strList []rune, reflectorMap map[int]int) {
 	for i := 0; i < len(strList); i++ {
 		char := strList[i]
 		num, _ := rune2num(char)
