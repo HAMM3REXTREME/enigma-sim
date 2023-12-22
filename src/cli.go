@@ -9,7 +9,7 @@ func userEnigmaInput(plugboard *obfuscatorMap, rotorArray []*rotor, reflector ma
 	userInput := scanLine()
 
 	//debugObfuscateFull(plugboard, rotorArray, userInputChars, reflector)
-	enigmaOutput := encryptText(plugboard, rotorArray, reflector, userInput)
+	enigmaOutput := encryptText(plugboard, rotorArray, reflector, userInput, true)
 
 	fmt.Printf("ENIGMA output: %s\n", string(enigmaOutput))
 }

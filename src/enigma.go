@@ -2,14 +2,14 @@ package main
 
 import "unicode"
 
-func encryptText(plugboard *obfuscatorMap, rotors []*rotor, reflectorMap map[int]int, text string) string {
+func encryptText(plugboard *obfuscatorMap, rotors []*rotor, reflectorMap map[int]int, text string, matchCase bool) string {
 	encryptedText := "" // Empty start
 
 	for _, char := range text {
 		if unicode.IsLetter(char) { // Only encrypt letters
 			encryptedChar := encryptRune(plugboard, rotors, reflectorMap, char)
 
-			if unicode.IsLower(char) {
+			if unicode.IsLower(char) && matchCase { // Our new encrypted character should be lowercase if the starting character was lowercase and matchCase = true
 				encryptedText += (string(unicode.ToLower(encryptedChar)))
 			} else {
 				encryptedText += string(encryptedChar)
