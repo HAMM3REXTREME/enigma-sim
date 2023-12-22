@@ -1,7 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"errors"
+	"fmt"
+	"os"
 	"unicode"
 )
 
@@ -35,4 +38,13 @@ func num2char(number int) (rune, error) {
 	char := rune('A' + number - 1) // Convert the number to the corresponding uppercase English alphabet letter
 
 	return char, nil
+}
+
+func scanLine() string {
+	// Scans a line. Will count spaces.
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	line := scanner.Text()
+	fmt.Println("Your input:", line)
+	return line
 }

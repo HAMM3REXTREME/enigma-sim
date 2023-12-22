@@ -1,24 +1,37 @@
 package main
 
-func stringEnigma(plugboard *obfuscatorMap, rotors []*rotor, reflectorMap map[int]int, stringInput string) []rune {
-	enigmaRune := []rune(stringInput)
-	// Go through every letter in the given string
-	for i := 0; i < len(enigmaRune); i++ {
-		char := enigmaRune[i]
-		incrementRotors(rotors)
+import "unicode"
 
-		num, _ := char2num(char)
+func encryptText(plugboard *obfuscatorMap, rotors []*rotor, reflectorMap map[int]int, text string) string {
+	encryptedText := "" // Empty start
 
-		num = plugboard.throughMapF(num)
-		num = throughRotorsF(rotors, num)
-		num = throughReflector(reflectorMap, num)
-		num = throughRotorsB(rotors, num)
-		num = plugboard.throughMapB(num)
-
-		enigmaRune[i], _ = num2char(num)
-
+	for _, char := range text {
+		if unicode.IsLetter(char) {
+			encryptedChar := encryptRune(plugboard, rotors, reflectorMap, char)
+			encryptedText += string(encryptedChar)
+		} else {
+			encryptedText += string(char)
+		}
 	}
-	return enigmaRune
+
+	return encryptedText
+}
+
+func encryptRune(plugboard *obfuscatorMap, rotors []*rotor, reflectorMap map[int]int, char rune) rune {
+	// Takes a rune and outputs the encrypted rune. Pure function
+	var newChar rune
+
+	incrementRotors(rotors)
+	num, _ := char2num(char)
+
+	num = plugboard.throughMapF(num)
+	num = throughRotorsF(rotors, num)
+	num = throughReflector(reflectorMap, num)
+	num = throughRotorsB(rotors, num)
+	num = plugboard.throughMapB(num)
+
+	newChar, _ = num2char(num)
+	return newChar
 }
 
 func incrementRotors(rotorArray []*rotor) {
