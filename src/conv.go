@@ -5,12 +5,11 @@ import (
 	"unicode"
 )
 
-// The ENIGMA machine rotors were made fairly useless (weak) for large letter sets because of their cyclic nature.
-// So I have not bothered to 'improve' them in any way since this is just a simulator, and I have limited it to 26 letters.
-// The original ENIGMA machine only dealt with the 26 letters of the English alphabet.
+/* The ENIGMA machine rotors were made fairly useless (weak) for large letter sets because of their cyclic nature.
+So I have not bothered to 'improve' them in any way since this is just a simulator, and I have limited it to 26 letters.
+The original ENIGMA machine only dealt with the 26 letters of the English alphabet. */
 
-func rune2num(char rune) (int, error) {
-	// rune [A to Z] ---> int (1 to 26)
+func rune2num(char rune) (int, error) { // rune [A to Z] ---> int (1 to 26)
 	if !unicode.IsLetter(char) { // Bail if rune is not a letter
 		return 0, errors.New("input must be a valid english alphabet letter")
 	}

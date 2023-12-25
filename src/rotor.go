@@ -7,12 +7,12 @@ package main
 // letterID is is the static contact pin for that letter.
 // offsetSignal is the actual contact pin activated on the rotor due to its spin offset angle. Does roll over if 0>=x>26
 // finalSignal is what comes out of the rotor + corrected for spin offset since both sides of the rotor move when spun.
-func (r *rotor) throughRotorF(letterID int) int {
+func (r *rotor) throughRotorF(letterID int) int { // Front to back
 	offsetSignal := addWithOverflow(letterID, r.spin-1, Letters)
 	finalSignal := addWithOverflow(r.mapping.forward[offsetSignal], r.spin-1, Letters)
 	return finalSignal
 }
-func (r *rotor) throughRotorB(letterID int) int {
+func (r *rotor) throughRotorB(letterID int) int { // Back to front
 	offsetSignal := addWithOverflow(letterID, -(r.spin - 1), Letters)
 	finalSignal := addWithOverflow(r.mapping.backward[offsetSignal], -(r.spin - 1), Letters)
 	return finalSignal
