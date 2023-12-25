@@ -20,9 +20,7 @@ func rune2num(char rune) (int, error) {
 
 	return number, nil
 }
-func num2rune(number int) (rune, error) {
-	// int (1 to 26) ---> rune [A to Z]
-
+func num2rune(number int) (rune, error) { // int (1 to 26) ---> rune [A to Z] (along with any errors)
 	// Check if the number is within the valid range of 1 to 26
 	if number < 1 || number > Letters {
 		return 0, errors.New("letter input must be between 1 and 26")
@@ -33,30 +31,22 @@ func num2rune(number int) (rune, error) {
 }
 
 func runes2map(runes []rune) map[int]int { // Takes a []rune and returns a map[int][int]  (ints are 1 to 26)
-	letterList := make([]int, len(runes)) // letter ints instead of just letters
 	finalMap := make(map[int]int)
-	for x := 0; x < len(runes); x++ { // Convert from []rune{'A','Z'} to []int{1,26}
-		letterList[x], _ = rune2num(runes[x])
-	}
-	for i, r := range letterList { // Actually make map from int letter list
-		finalMap[i+1] = int(r)
+	for i, r := range runes {
+		letterID, _ := rune2num(r)
+		finalMap[i+1] = letterID
 	}
 	return finalMap
 }
 
-func runes2biMap(runes []rune) *biMap {
-	// Take a []rune and return a biMap (1 to 26)
-	// Convert A-Z to 1-26 and convert to bimap
+func runes2biMap(runes []rune) *biMap { // Takes a []rune and returns a biMap (1 to 26)
 	forward := make(map[int]int)
 	backward := make(map[int]int)
-	letterList := make([]int, len(runes)) // List of 1 to 26
-	for x := 0; x < len(runes); x++ {     // Convert from []rune{'A','Z'} to []int{1,26}
-		letterList[x], _ = rune2num(runes[x])
-	}
 
-	for i, r := range letterList { // Make bimap from int letter list
-		forward[i+1] = int(r)
-		backward[int(r)] = i + 1
+	for i, r := range runes {
+		letterID, _ := rune2num(r)
+		forward[i+1] = letterID
+		backward[letterID] = i + 1
 	}
 
 	return &biMap{
