@@ -1,9 +1,7 @@
 package main
 
 import (
-	"bufio"
 	"errors"
-	"os"
 	"unicode"
 )
 
@@ -22,10 +20,8 @@ func rune2num(char rune) (int, error) {
 
 	return number, nil
 }
-
 func num2rune(number int) (rune, error) {
 	// int (1 to 26) ---> rune [A to Z]
-	// You can compare the case the of the original rune/string if you insist on having the same case (though it is not historically accurate)
 
 	// Check if the number is within the valid range of 1 to 26
 	if number < 1 || number > Letters {
@@ -33,41 +29,29 @@ func num2rune(number int) (rune, error) {
 	}
 
 	char := rune('A' + number - 1) // Convert the number to the corresponding uppercase English alphabet letter
-
 	return char, nil
 }
 
-func scanLine() string {
-	// Scans a line. Will count spaces.
-	scanner := bufio.NewScanner(os.Stdin)
-	scanner.Scan()
-	line := scanner.Text()
-	//fmt.Println("Your input:", line)
-	return line
-}
-
-func runes2map(runes []rune) map[int]int{
-	// Takes a []rune and returns a map[int][int]  (ints are 1 to 26)
-	mapping := make(map[int]int)
-    letterList := make([]int,len(runes)) // List of 1 to 26
-	for x := 0;x<len(runes);x++{ // Convert from []rune{'A','Z'} to []int{1,26}
-		letterList[x],_=rune2num(runes[x])
+func runes2map(runes []rune) map[int]int { // Takes a []rune and returns a map[int][int]  (ints are 1 to 26)
+	letterList := make([]int, len(runes)) // letter ints instead of just letters
+	finalMap := make(map[int]int)
+	for x := 0; x < len(runes); x++ { // Convert from []rune{'A','Z'} to []int{1,26}
+		letterList[x], _ = rune2num(runes[x])
 	}
-	for i, r := range letterList { // Make map from int letter list
-		mapping[i+1] = int(r)
+	for i, r := range letterList { // Actually make map from int letter list
+		finalMap[i+1] = int(r)
 	}
-	return mapping
+	return finalMap
 }
-
 
 func runes2biMap(runes []rune) *biMap {
 	// Take a []rune and return a biMap (1 to 26)
 	// Convert A-Z to 1-26 and convert to bimap
 	forward := make(map[int]int)
 	backward := make(map[int]int)
-    letterList := make([]int,len(runes)) // List of 1 to 26
-	for x := 0;x<len(runes);x++{ // Convert from []rune{'A','Z'} to []int{1,26}
-		letterList[x],_=rune2num(runes[x])
+	letterList := make([]int, len(runes)) // List of 1 to 26
+	for x := 0; x < len(runes); x++ {     // Convert from []rune{'A','Z'} to []int{1,26}
+		letterList[x], _ = rune2num(runes[x])
 	}
 
 	for i, r := range letterList { // Make bimap from int letter list

@@ -2,13 +2,13 @@ package main
 
 func incrementRotors(rotorArray []*rotor) {
 	// Increments rotors when notch aligns.
-	rotorArray[0].rotorSpinOffset = addWithOverflow(rotorArray[0].rotorSpinOffset, 1, Letters)
+	rotorArray[0].spin = addWithOverflow(rotorArray[0].spin, 1, Letters)
 
 	for i := 1; i < len(rotorArray)-1; i++ {
-		if rotorArray[i-1].rotorSpinOffset == rotorArray[i-1].nextRotorSpin { // If previous rotor's notch is matching,
-			rotorArray[i].rotorSpinOffset = addWithOverflow(rotorArray[i].rotorSpinOffset, 1, Letters) // Increment this rotor then
-			if rotorArray[i].rotorSpinOffset == rotorArray[i].nextRotorSpin {                          // and if this rotor's notch matches, increment the next rotor too
-				rotorArray[i+1].rotorSpinOffset = addWithOverflow(rotorArray[i+1].rotorSpinOffset, 1, Letters)
+		if rotorArray[i-1].spin == rotorArray[i-1].notch { // If previous rotor's notch is matching,
+			rotorArray[i].spin = addWithOverflow(rotorArray[i].spin, 1, Letters) // Increment this rotor then
+			if rotorArray[i].spin == rotorArray[i].notch {                       // and if this rotor's notch matches, increment the next rotor too
+				rotorArray[i+1].spin = addWithOverflow(rotorArray[i+1].spin, 1, Letters)
 			}
 		}
 	}
