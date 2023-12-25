@@ -1,15 +1,15 @@
 package main
 
 import (
-	"fmt"
+	"errors"
 	"unicode"
 )
 
-// Just a convienient way to make a new enigma machine
+// Just a convenient way to make a new enigma machine
 func newEnigmaMachine(plugboard *biMap, rotors []*rotor, reflector map[int]int) (*enigmaMachine, error) {
 
 	if err := validateReflector(reflector); err != nil {
-		return nil, fmt.Errorf("ENIGMA reflector error: %v", err)
+		return nil, err
 	}
 
 	return &enigmaMachine{
@@ -69,4 +69,16 @@ func encryptRune(machine enigmaMachine, char rune) (rune, error) {
 	return newChar, nil
 }
 
-//func checkReflector(mapping []rune)
+// Takes a map[int]int and checks if it can be a physically reflector
+// If x maps to y then y must map to x else the machine exhibits buggy behavior
+func validateReflector(mapping map[int]int) error {
+	for i, r := range mapping {
+		if i == r {
+			return errors.New("reflector cannot map a letter to itself")
+		}
+		if mapping[r] != i {
+			return errors.New("reflector must form 1:1 connections")
+		}
+	}
+	return nil
+}
