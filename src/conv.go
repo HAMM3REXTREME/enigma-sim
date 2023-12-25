@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"unicode"
 )
 
@@ -20,7 +21,6 @@ func rune2num(char rune) (int, error) { // rune [A to Z] ---> int (1 to 26)
 	return number, nil
 }
 func num2rune(number int) (rune, error) { // int (1 to 26) ---> rune [A to Z] (along with any errors)
-	// Check if the number is within the valid range of 1 to 26
 	if number < 1 || number > Letters {
 		return 0, errors.New("letter input must be between 1 and 26")
 	}
@@ -29,21 +29,27 @@ func num2rune(number int) (rune, error) { // int (1 to 26) ---> rune [A to Z] (a
 	return char, nil
 }
 
-func runes2map(runes []rune) map[int]int { // Takes a []rune and returns a map[int][int]  (ints are 1 to 26)
+func runes2map(runes []rune) (map[int]int, error) { // Takes a []rune and returns a map[int][int]  (ints are 1 to 26)
 	finalMap := make(map[int]int)
 	for i, r := range runes {
-		letterID, _ := rune2num(r)
+		letterID, err := rune2num(r)
+		if err != nil {
+			return nil, fmt.Errorf("rune2map: Error converting rune to letter ID at index %d: %v", i, err)
+		}
 		finalMap[i+1] = letterID
 	}
-	return finalMap
+	return finalMap, nil
 }
 
-func runes2biMap(runes []rune) *biMap { // Takes a []rune and returns a biMap (1 to 26)
+func runes2biMap(runes []rune) (*biMap, error) { // Takes a []rune and returns a biMap (1 to 26)
 	forward := make(map[int]int)
 	backward := make(map[int]int)
 
 	for i, r := range runes {
-		letterID, _ := rune2num(r)
+		letterID, err := rune2num(r)
+		if err != nil {
+			return nil, fmt.Errorf("rune2bimap: Error converting rune to letter ID at index %d: %v", i, err)
+		}
 		forward[i+1] = letterID
 		backward[letterID] = i + 1
 	}
@@ -51,5 +57,5 @@ func runes2biMap(runes []rune) *biMap { // Takes a []rune and returns a biMap (1
 	return &biMap{
 		forward:  forward,
 		backward: backward,
-	}
+	}, nil
 }

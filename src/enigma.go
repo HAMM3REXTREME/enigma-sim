@@ -1,18 +1,26 @@
 package main
 
-import "unicode"
+import (
+	"fmt"
+	"unicode"
+)
 
 // Just a convienient way to make a new enigma machine
-func newEnigmaMachine(plugboard *biMap, rotors []*rotor, reflector map[int]int) *enigmaMachine {
+func newEnigmaMachine(plugboard *biMap, rotors []*rotor, reflector map[int]int) (*enigmaMachine, error) {
+
+	if err := validateReflector(reflector); err != nil {
+		return nil, fmt.Errorf("ENIGMA reflector error: %v", err)
+	}
+
 	return &enigmaMachine{
 		plugboard:  plugboard,
 		rotorArray: rotors,
 		reflector:  reflector,
-	}
+	}, nil
 }
 
+// Fancy text encryption
 func encryptText(machine enigmaMachine, text string, matchCase bool) (string, error) {
-	// Fancy text encryption
 	encryptedText := "" // Our new encrypted text
 
 	for _, char := range text {

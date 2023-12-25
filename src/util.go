@@ -4,7 +4,8 @@ import (
 	"errors"
 )
 
-func addWithOverflow(a, b, modulus int) int { // Adds a and b and returns 0<result<=26
+// Adds a and b and returns 0<result<=26
+func addWithOverflow(a, b, modulus int) int {
 	result := (a + b) % modulus
 	if result <= 0 {
 		result += modulus
@@ -12,15 +13,16 @@ func addWithOverflow(a, b, modulus int) int { // Adds a and b and returns 0<resu
 	return result
 }
 
-func validateMap(mapping map[int]int, isReflector bool) error { // Takes a map[int]int and checks if it can be a physically possible plugboard/reflector
-	// If x maps to y then y must map to x else you gonna get bugs
+// Takes a map[int]int and checks if it can be a physically reflector
+// If x maps to y then y must map to x else the machine exhibits buggy behavior
+func validateReflector(mapping map[int]int) error {
 	for i, r := range mapping {
-		if i == r && isReflector {
-			return errors.New("reflector cannot map to itself") // Reflectors cannot map any letter to itself
+		if i == r {
+			return errors.New("reflector cannot map a letter to itself")
 		}
 
 		if mapping[r] != i {
-			return errors.New("plugboard/reflector must form 1:1 connections")
+			return errors.New("reflector must form 1:1 connections")
 		}
 	}
 
