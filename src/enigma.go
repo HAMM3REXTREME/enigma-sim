@@ -69,8 +69,8 @@ func encryptRune(machine enigmaMachine, char rune) (rune, error) {
 	return newChar, nil
 }
 
-// Takes a map[int]int and checks if it can be a physically reflector
-// If x maps to y then y must map to x else the machine exhibits buggy behavior
+// Takes a map[int]int and checks if it can be a physically possible reflector
+// If x maps to y then y must map to x else the ENIGMA machine will exhibit buggy behavior
 func validateReflector(mapping map[int]int) error {
 	for i, r := range mapping {
 		if i == r {
