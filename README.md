@@ -1,6 +1,6 @@
 # ENIGMA Sim
 
-WIP Enigma machine simulator written in Go
+Simple Enigma machine simulator written in Go
 
 ## Building
     cd src
